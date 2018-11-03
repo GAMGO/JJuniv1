@@ -1,2 +1,2 @@
-# gbc2018
-JeonJu.univ Unity 3d Lecture Repositories.
+# JJUniv1
+It is The Dept of Game Contents in JeonJu University's Unity 3d Lecture Repositories.
