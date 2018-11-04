@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerATTACK : PlayerFSMState {
-
-	// Use this for initialization
-	void Start () {
+    public override void BeginState()
+    {
+        base.BeginState();
+        manager.ani.CrossFade("KK_Attack");
+    }
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

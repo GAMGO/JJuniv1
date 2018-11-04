@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class PlayerRUN : PlayerFSMState
 {
-    public Transform marker;
-    public float speed = 3.0f;
-	// Use this for initialization
-	void Start () {
-        marker = GameObject.FindGameObjectWithTag("Maker").transform;
-	}
-	
+    public override void BeginState()
+    {
+        base.BeginState();
+        manager.ani.CrossFade("KK_Run_No");
+    }
 	// Update is called once per frame
+    // A-B=AB>
 	void Update () {
-        Debug.Log("RUN");
-        transform.position = Vector3.MoveTowards(transform.position,marker.position,speed*Time.deltaTime);
-        if (Vector3.Distance(transform.position,marker.position)<0.01f)
+        Vector3 dir = manager.marker.position - transform.position;
+        dir.y = 0.0f;
+        if (dir != Vector3.zero)
         {
-            GetComponent<FSMManager>().SetState(PlayerState.IDLE);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),manager.stat.rs*Time.deltaTime);
+        }
+        Debug.Log("RUN");
+        transform.position = Vector3.MoveTowards(transform.position,manager.marker.position, manager.stat.s* Time.deltaTime);
+        if (Vector3.Distance(transform.position,manager.marker.position)<0.01f)
+        {
+           manager.SetState(PlayerState.IDLE);
         }
     }
 }

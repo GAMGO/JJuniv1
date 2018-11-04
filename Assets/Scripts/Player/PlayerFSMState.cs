@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 //FSM State Perentclass
 public class PlayerFSMState : MonoBehaviour {
+    public FSMManager manager;
+    public virtual void BeginState()
+    {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+    private void Awake()
+    {
+        manager = GetComponent<FSMManager>();
+    }
 }

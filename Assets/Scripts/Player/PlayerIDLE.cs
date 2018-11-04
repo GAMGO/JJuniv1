@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlayerIDLE : PlayerFSMState
 {
-
-	// Use this for initialization
-	void Start () {
-    		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    public override void BeginState()
+    {
+        base.BeginState();
+        manager.ani.CrossFade("KK_Idle");
+    }
+    void Update () {
         Debug.Log("IDLE");
+
     }
 }
