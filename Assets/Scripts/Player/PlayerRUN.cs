@@ -19,8 +19,12 @@ public class PlayerRUN : PlayerFSMState
             transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),manager.stat.rs*Time.deltaTime);
         }
         Debug.Log("RUN");
-        transform.position = Vector3.MoveTowards(transform.position,manager.marker.position, manager.stat.s* Time.deltaTime);
-        if (Vector3.Distance(transform.position,manager.marker.position)<0.01f)
+        Vector3 deltaMove = Vector3.MoveTowards(transform.position,manager.marker.position,manager.stat.s * Time.deltaTime)-transform.position;
+        deltaMove.y = -manager.stat.fall * Time.deltaTime;
+        manager.cc.Move(deltaMove);
+        Vector3 diff = manager.marker.position - transform.position;
+        diff.y = 0.0f;
+        if(diff.magnitude<0.1f)
         {
            manager.SetState(PlayerState.IDLE);
         }

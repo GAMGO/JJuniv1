@@ -15,16 +15,22 @@ public class FSMManager: MonoBehaviour {
     public Transform marker;
     public Animation ani;
     public CharacterStat stat;
+    public CharacterController cc;
+    public int layerMask;
+
     Dictionary<PlayerState, PlayerFSMState> states = new Dictionary<PlayerState, PlayerFSMState>();
+
     private void Awake()
     {
+        layerMask = 1<<LayerMask.NameToLayer("Level");
         marker = GameObject.FindGameObjectWithTag("Marker").transform;
         ani = GetComponentInChildren<Animation>();
         stat = GetComponent<CharacterStat>();
         states.Add(PlayerState.IDLE,GetComponent<PlayerIDLE>());
         states.Add(PlayerState.RUN,GetComponent<PlayerRUN>());
         states.Add(PlayerState.CHASE,GetComponent<PlayerCHASE>());
-        states.Add(PlayerState.ATTACK,GetComponent<PlayerATTACK>()); 
+        states.Add(PlayerState.ATTACK,GetComponent<PlayerATTACK>());
+        cc = GetComponent < CharacterController >();
     }
     public void SetState(PlayerState newState)
     {
@@ -46,11 +52,11 @@ public class FSMManager: MonoBehaviour {
         {
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(r,out hit,1000)){
+            if (Physics.Raycast(r,out hit,1000,layerMask)){
                 marker.position = hit.point;
                 /*Initialization All the States in new veriable and change PlayerStates to Suitable State.*/
                 SetState(PlayerState.RUN);
-            }
+            }//else if(){}
         }
     }
 }
