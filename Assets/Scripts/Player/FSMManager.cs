@@ -13,7 +13,7 @@ public class FSMManager: MonoBehaviour {
     public PlayerState currentState;
     public PlayerState startState;
     public Transform marker;
-    public Animation ani;
+    public Animator ani;
     public CharacterStat stat;
     public CharacterController cc;
     public int layerMask;
@@ -25,7 +25,7 @@ public class FSMManager: MonoBehaviour {
     {
         layerMask = (1 << 9) + (1 << 10);
         marker = GameObject.FindGameObjectWithTag("Marker").transform;
-        ani = GetComponentInChildren<Animation>();
+        ani = GetComponentInChildren<Animator>();
         stat = GetComponent<CharacterStat>();
         states.Add(PlayerState.IDLE,GetComponent<PlayerIDLE>());
         states.Add(PlayerState.RUN,GetComponent<PlayerRUN>());
@@ -44,6 +44,8 @@ public class FSMManager: MonoBehaviour {
         //Start newState.
         states[newState].enabled = true;
         states[newState].BeginState();
+        currentState = newState;
+        ani.SetInteger("CurrentState",(int)currentState);
     }
     void Start () {
         SetState(startState);
@@ -60,10 +62,25 @@ public class FSMManager: MonoBehaviour {
                     /*Initialization All the States in new veriable and change PlayerStates to Suitable State.*/
                     SetState(PlayerState.RUN);
                     target = null;
-                }else if (hit.transform.gameObject.layer == 10)
+                    foreach (Renderer ren in marker.GetComponentsInChildren<Renderer>())
+                    {
+                        ren.material.color = Color.white;
+                    }
+                    marker.parent = null;
+                    marker.localScale = Vector3.one * 0.3f;
+                }
+                else if (hit.transform.gameObject.layer == 10)
                 {
                     target = hit.transform;
                     SetState(PlayerState.CHASE);
+
+                    marker.parent = target;
+                    marker.localPosition = Vector3.zero;
+                    marker.localScale = Vector3.one;
+                    foreach(Renderer ren in marker.GetComponentsInChildren<Renderer>())
+                    {
+                        ren.material.color = Color.red;
+                    }
                 }
                 
             }//else if(){}

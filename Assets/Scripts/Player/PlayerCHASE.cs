@@ -6,7 +6,6 @@ public class PlayerCHASE : PlayerFSMState {
     public override void BeginState()
     {
         base.BeginState();
-        manager.ani.CrossFade("KK_Run");
     }
 	void Update () {
         Debug.Log("CHASE");

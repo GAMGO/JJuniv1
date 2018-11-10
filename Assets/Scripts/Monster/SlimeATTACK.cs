@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIDLE : PlayerFSMState
-{
+public class SlimeATTACK : SlimeFSMState {
     public override void BeginState()
     {
         base.BeginState();
     }
+    // Update is called once per frame
     void Update () {
-        Debug.Log("IDLE");
-
-    }
+		
+	}
 }

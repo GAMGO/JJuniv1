@@ -7,7 +7,6 @@ public class PlayerRUN : PlayerFSMState
     public override void BeginState()
     {
         base.BeginState();
-        manager.ani.CrossFade("KK_Run_No");
     }
 	// Update is called once per frame
     // A-B=AB>
