@@ -13,6 +13,11 @@ public class SlimePATROL : SlimeFSMState
     }
     // Update is called once per frame
     void Update () {
+        if (GameLib.DetectCharacter(manager.sight, manager.PlayerCc))
+        {
+            manager.SetState(SlimeState.CHASE);
+            return;
+        }
         Vector3 diff = destination - transform.position;
         diff.y = 0;
         if (diff.magnitude < 0.1f)
@@ -20,7 +25,7 @@ public class SlimePATROL : SlimeFSMState
             manager.SetState(SlimeState.IDLE);
             return;
         }
-
+        
         GameLib.JJMove(manager.scc, destination, manager.stat);
     }
 }

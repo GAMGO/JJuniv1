@@ -6,33 +6,41 @@ public enum SlimeState
     IDLE = 0,
     PATROL,
     CHASE,
-    ATTACK
+    ATTACK,
+    DEAD
 }
 
-public class SlimeFSMManager : MonoBehaviour {
+public class SlimeFSMManager : MonoBehaviour, IFSMManager {
     public Animator slani;
     public SlimeState startState;
     public SlimeState currentState;
     public SlimeStat stat;
-    public Transform player;
+    public Transform target;
     public CharacterController scc;
     public Camera sight;
+    public CharacterController PlayerCc;
 
    Dictionary<SlimeState,SlimeFSMState> states = new Dictionary<SlimeState, SlimeFSMState>();
-   private void Awake()
-   {
+    private void Awake()
+    {
         slani = GetComponentInChildren<Animator>();
         stat = GetComponent<SlimeStat>();
         states.Add(SlimeState.IDLE, GetComponent<SlimeIDLE>());
         states.Add(SlimeState.PATROL, GetComponent<SlimePATROL>());
         states.Add(SlimeState.CHASE, GetComponent<SlimeCHASE>());
         states.Add(SlimeState.ATTACK, GetComponent<SlimeATTACK>());
+        states.Add(SlimeState.DEAD, GetComponent<SlimeDEAD>());
         scc = GetComponent<CharacterController>();
         sight = GetComponentInChildren<Camera>();
-    }
+        PlayerCc = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+     }
 
     public void SetState(SlimeState newState)
     {
+        if (currentState == SlimeState.DEAD)
+        {
+            return;
+        }
         foreach(SlimeFSMState fsm in states.Values){
             fsm.enabled = false;
         }
@@ -50,7 +58,11 @@ public class SlimeFSMManager : MonoBehaviour {
 	}
     private void OnDrawGizmos()
     {
-        if(sight!= null)
+        if (currentState == SlimeState.DEAD)
+        {
+            return;
+        }
+        if (sight!= null)
         {
             Matrix4x4 temp = Gizmos.matrix;
             Gizmos.color = Color.red;
@@ -58,5 +70,23 @@ public class SlimeFSMManager : MonoBehaviour {
             Gizmos.DrawFrustum(sight.transform.position,sight.fieldOfView,sight.farClipPlane,sight.nearClipPlane,sight.aspect);
             Gizmos.matrix = temp;
         }
+    }
+
+    public void AttackCheck()
+    {
+        CharacterStat targetStat = PlayerCc .GetComponent<CharacterStat>();
+        targetStat.ApplyDamage(stat);
+    }
+
+    public void SetDead()
+    {
+        SetState(SlimeState.DEAD);
+        scc.enabled = false;
+        PlayerCc.GetComponent<FSMManager>().marker.gameObject.SetActive(false);
+    }
+
+    public void NotifyDead()
+    {
+        SetState(SlimeState.IDLE);
     }
 }

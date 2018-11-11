@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIDLE : PlayerFSMState
-{
-
+public class SlimeDEAD : SlimeFSMState {
+  
+    
     public override void BeginState()
     {
         base.BeginState();
-        manager.marker.gameObject.SetActive(false);
     }
-
-    void Update () {
-        Debug.Log("IDLE");
-
-    }
+	void Update () {
+		
+	}
+   
 }

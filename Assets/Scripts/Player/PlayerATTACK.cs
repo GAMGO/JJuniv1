@@ -18,6 +18,14 @@ public class PlayerATTACK : PlayerFSMState {
 	// Update is called once per frame
 	void Update () {
         Debug.Log("ATTACK");
+        
+        if (Vector3.Distance(transform.position, manager.target.position)
+            > manager.stat.attackR)
+        {
+            manager.SetState(PlayerState.CHASE);
+            return;
+        }
+        GameLib.JJRotate(transform, manager.target.position, manager.stat);
         Vector3 diff = manager.target.position - transform.position;
         diff.y = 0.0f;
         if (diff.magnitude > manager.stat.attackR)

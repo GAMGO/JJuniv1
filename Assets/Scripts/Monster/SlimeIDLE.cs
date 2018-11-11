@@ -17,7 +17,12 @@ public class SlimeIDLE : SlimeFSMState {
         if(elapsedTime >= idleTime)
         {
             manager.SetState(SlimeState.PATROL);
-
+            Debug.Log("?");
+        }
+        if (GameLib.DetectCharacter(manager.sight, manager.PlayerCc))
+        {
+            manager.SetState(SlimeState.CHASE);
+            return;
         }
     }
 }

@@ -10,12 +10,18 @@ public class SlimeCHASE : SlimeFSMState{
     // Update is called once per frame
     void Update () {
         Debug.Log("SlimeCHASE");
-        
-        Vector3 diff = manager.player.position - transform.position;
-        diff.y = 0.0f;
-        if (diff.magnitude < manager.stat.slimeRange)
+
+        if (!GameLib.DetectCharacter(manager.sight, manager.PlayerCc))
+        {
+            manager.SetState(SlimeState.IDLE);
+            return;
+           
+        }
+        GameLib.JJMove(manager.scc, manager.PlayerCc.transform, manager.stat);
+        if (Vector3.Distance(transform.position, manager.PlayerCc.transform.position) < manager.stat.slimeRange)
         {
             manager.SetState(SlimeState.ATTACK);
+            return;
         }
     }
 }
